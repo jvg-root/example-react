@@ -14,27 +14,27 @@ const UserList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
 
-  const usersPerPage = 6;
+  //Filtrado de usuarios
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(search.toLowerCase()) ||
     user.username.toLowerCase().includes(search.toLowerCase()) ||
     user.email.toLowerCase().includes(search.toLowerCase())
   );
 
+  //Paginación
+  const usersPerPage = 6;
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const nextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
-
   const prevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
+  //Cargamos los usaurios desde la api
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -54,7 +54,9 @@ const UserList: React.FC = () => {
   
   }, []);
 
+  //Mientras carga
   if (loading) return <Loader></Loader>;
+  //Si ocurre algún error al recuparar la info
   if (error) return <ErrorMessage message={error} />;
 
   return (
